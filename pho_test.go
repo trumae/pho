@@ -1,7 +1,6 @@
 package pho
 
 import (
-	"log"
 	"testing"
 )
 
@@ -73,7 +72,7 @@ func TestOne(t *testing.T) {
 
 }
 
-func TestAnd(t *testing.T) {
+func TestSeq(t *testing.T) {
 	const sinput = "ab"
 
 	input := []interface{}{}
@@ -81,20 +80,20 @@ func TestAnd(t *testing.T) {
 		input = append(input, c)
 	}
 
-	grammar := And{Some(IsLetter), Some(IsLetter)}
+	grammar := Seq{Some(IsLetter), Some(IsLetter)}
 
 	_, err := grammar.Run(input)
 	if err != nil {
 		t.Error(err)
 	}
 
-	grammar = And{One{Value: input[0]}, Some(IsLetter)}
+	grammar = Seq{One{Value: input[0]}, Some(IsLetter)}
 	_, err = grammar.Run(input)
 	if err != nil {
 		t.Error(err)
 	}
 
-	grammar = And{One{Value: input[1]}, Some(IsLetter)}
+	grammar = Seq{One{Value: input[1]}, Some(IsLetter)}
 	_, err = grammar.Run(input)
 	if err == nil {
 		t.Error("Error expected")
@@ -112,9 +111,7 @@ func TestOr(t *testing.T) {
 	grammar := Or{One{Value: input[0]},
 		One{Value: input[1]}}
 
-	log.Println(grammar)
-
-	out, err := grammar.Run(input)
+	_, err := grammar.Run(input)
 	if err != nil {
 		t.Error(err)
 	}

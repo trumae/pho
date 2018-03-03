@@ -17,7 +17,7 @@ type Some FPredicate
 type One struct {
 	Value interface{}
 }
-type And []Operator
+type Seq []Operator
 type Or []Operator
 type Many FPredicate
 
@@ -48,9 +48,9 @@ func (one One) Run(input []interface{}) ([]interface{}, error) {
 }
 
 //Run for And
-func (a And) Run(input []interface{}) ([]interface{}, error) {
+func (seq Seq) Run(input []interface{}) ([]interface{}, error) {
 	ret := []interface{}{}
-	for _, term := range a {
+	for _, term := range seq {
 		o, err := term.Run(input)
 		if err != nil {
 			return nil, err
