@@ -2,8 +2,11 @@ package pho
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 )
+
+var Debug = true
 
 type FPredicate func(interface{}) bool
 type FApply func(interface{}) (interface{}, error)
@@ -21,8 +24,16 @@ type Or []Operator
 
 type Many FPredicate
 
+func debugInit(t string, input []interface{}) {
+	if Debug {
+		log.Println(t, input)
+	}
+}
+
 //Run for Some
 func (some Some) Run(input []interface{}) ([]interface{}, error) {
+	debugInit("Some", input)
+
 	if len(input) == 0 {
 		return nil, fmt.Errorf("Some value expected")
 	}
@@ -37,6 +48,8 @@ func (some Some) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for One
 func (one One) Run(input []interface{}) ([]interface{}, error) {
+	debugInit("One", input)
+
 	pred := func(i interface{}) bool {
 		return reflect.DeepEqual(i, one.Value)
 	}
@@ -46,6 +59,8 @@ func (one One) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for And
 func (seq Seq) Run(input []interface{}) ([]interface{}, error) {
+	debugInit("Seq", input)
+
 	ret := []interface{}{}
 	for _, term := range seq {
 		o, err := term.Run(input)
@@ -61,6 +76,8 @@ func (seq Seq) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for Or
 func (o Or) Run(input []interface{}) ([]interface{}, error) {
+	debugInit("Or", input)
+
 	for _, term := range o {
 		o, err := term.Run(input)
 		if err == nil {
@@ -72,6 +89,8 @@ func (o Or) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for Many
 func (many Many) Run(input []interface{}) ([]interface{}, error) {
+	debugInit("Many", input)
+
 	f, err := Some(many).Run(input)
 	if err != nil {
 		return nil, nil
