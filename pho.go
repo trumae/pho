@@ -22,7 +22,9 @@ type One struct {
 type Seq []Operator
 type Or []Operator
 
-type Many FPredicate
+type Many struct {
+	Value Operator
+}
 
 func debugInit(t string, input []interface{}) {
 	if Debug {
@@ -91,7 +93,7 @@ func (o Or) Run(input []interface{}) ([]interface{}, error) {
 func (many Many) Run(input []interface{}) ([]interface{}, error) {
 	debugInit("Many", input)
 
-	f, err := Some(many).Run(input)
+	f, err := many.Value.Run(input[0:1])
 	if err != nil {
 		return nil, nil
 	}
