@@ -6,8 +6,7 @@ import (
 )
 
 type FPredicate func(interface{}) bool
-type FProc func(interface{}) interface{}
-type FApply func(interface{}) interface{}
+type FApply func(interface{}) (interface{}, error)
 
 type Operator interface {
 	Run([]interface{}) ([]interface{}, error)
@@ -19,10 +18,8 @@ type One struct {
 }
 type Seq []Operator
 type Or []Operator
-type Many FPredicate
 
-type Then FProc
-type Apply FApply
+type Many FPredicate
 
 //Run for Some
 func (some Some) Run(input []interface{}) ([]interface{}, error) {
@@ -71,4 +68,20 @@ func (o Or) Run(input []interface{}) ([]interface{}, error) {
 		}
 	}
 	return nil, fmt.Errorf("No match OR")
+}
+
+//Run for Many
+func (many Many) Run(input []interface{}) ([]interface{}, error) {
+	f, err := Some(many).Run(input)
+	if err != nil {
+		return nil, nil
+	}
+
+	rest, err := many.Run(input[1:])
+	if err != nil {
+		return f, nil
+	}
+
+	ret := append(f, rest...)
+	return ret, nil
 }

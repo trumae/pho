@@ -115,5 +115,31 @@ func TestOr(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
 
+func TestMany(t *testing.T) {
+	const sinput = "Trumae"
+	const sinput2 = "rr2"
+
+	input := []interface{}{}
+	for _, c := range sinput {
+		input = append(input, c)
+	}
+
+	grammar := Many(IsLetter)
+
+	_, err := grammar.Run(input)
+	if err != nil {
+		t.Error(err)
+	}
+
+	input = []interface{}{}
+	for _, c := range sinput2 {
+		input = append(input, c)
+	}
+
+	_, err = grammar.Run(input)
+	if err != nil {
+		t.Error(err)
+	}
 }
