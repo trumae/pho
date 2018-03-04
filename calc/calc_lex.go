@@ -15,6 +15,8 @@ type Identifier struct {
 
 //Run for Identifier
 func (ident *Identifier) Run(input []interface{}) ([]interface{}, error) {
+	pho.DebugOnInit("Identifier", input)
+
 	grammar := pho.Seq{pho.Some(pho.IsLetter),
 		pho.Many{
 			Value: pho.Or{pho.Some(pho.IsLetter),
@@ -45,6 +47,8 @@ type Integer struct {
 
 //Run for Integer
 func (integer *Integer) Run(input []interface{}) ([]interface{}, error) {
+	pho.DebugOnInit("Integer", input)
+
 	grammar := pho.Seq{pho.Some(pho.IsDigit),
 		pho.Many{Value: pho.Some(pho.IsDigit)}}
 

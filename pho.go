@@ -26,7 +26,7 @@ type Many struct {
 	Value Operator
 }
 
-func debugInit(t string, input []interface{}) {
+func DebugOnInit(t string, input []interface{}) {
 	if Debug {
 		log.Println(t, input)
 	}
@@ -34,7 +34,7 @@ func debugInit(t string, input []interface{}) {
 
 //Run for Some
 func (some Some) Run(input []interface{}) ([]interface{}, error) {
-	debugInit("Some", input)
+	DebugOnInit("Some", input)
 
 	if len(input) == 0 {
 		return nil, fmt.Errorf("Some value expected")
@@ -50,7 +50,7 @@ func (some Some) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for One
 func (one One) Run(input []interface{}) ([]interface{}, error) {
-	debugInit("One", input)
+	DebugOnInit("One('"+string([]rune{one.Value.(rune)})+"')", input)
 
 	pred := func(i interface{}) bool {
 		return reflect.DeepEqual(i, one.Value)
@@ -61,7 +61,7 @@ func (one One) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for And
 func (seq Seq) Run(input []interface{}) ([]interface{}, error) {
-	debugInit("Seq", input)
+	DebugOnInit("Seq", input)
 
 	ret := []interface{}{}
 	for _, term := range seq {
@@ -78,7 +78,7 @@ func (seq Seq) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for Or
 func (o Or) Run(input []interface{}) ([]interface{}, error) {
-	debugInit("Or", input)
+	DebugOnInit("Or", input)
 
 	for _, term := range o {
 		o, err := term.Run(input)
@@ -91,7 +91,7 @@ func (o Or) Run(input []interface{}) ([]interface{}, error) {
 
 //Run for Many
 func (many Many) Run(input []interface{}) ([]interface{}, error) {
-	debugInit("Many", input)
+	DebugOnInit("Many", input)
 
 	f, err := many.Value.Run(input[0:1])
 	if err != nil {
