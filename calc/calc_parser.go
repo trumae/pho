@@ -51,7 +51,7 @@ func (term *Term) Run(input []interface{}) ([]interface{}, error) {
 func (expr *Expression) Run(input []interface{}) ([]interface{}, error) {
 	pho.DebugOnInit("Expression", input)
 
-	plus := []rune("*")[0]
+	plus := []rune("+")[0]
 	grammar := pho.Or{pho.Seq{&Term{}, pho.One{Value: plus}, &Expression{}},
 		&Term{}}
 

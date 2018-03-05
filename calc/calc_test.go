@@ -29,9 +29,9 @@ func TestIndentifier(t *testing.T) {
 }
 
 func TestInteger(t *testing.T) {
-	pho.Debug = false
+	pho.Debug = true
 
-	sinput := "878"
+	sinput := " 878"
 	input := []interface{}{}
 	for _, c := range sinput {
 		input = append(input, c)
@@ -52,14 +52,15 @@ func TestInteger(t *testing.T) {
 func TestExpression(t *testing.T) {
 	pho.Debug = true
 
-	sinput := "88+554"
+	sinput := "5 +    887"
+	//sinput := "(12)"
 	input := []interface{}{}
 	for _, c := range sinput {
 		input = append(input, c)
 	}
 
-	factor := Expression{}
-	out, err := factor.Run(input)
+	gra := Expression{}
+	out, err := gra.Run(input)
 	if err != nil {
 		t.Error(err)
 	}
